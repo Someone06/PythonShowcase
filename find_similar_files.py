@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Iterable, Iterator
+from typing import Callable, Iterable, Iterator
 from pprint import pprint as pretty_print
 from collections import defaultdict
 
@@ -20,9 +20,33 @@ from collections import defaultdict
 def group_by_suffix(file_names: Iterable[Path]) -> dict[str, set[str]]:
     result = defaultdict(lambda: set())
     for file_name in file_names:
+        if file_name.stem not in result:
+            result[file_name.stem] = set()
         result[file_name.stem].add(file_name.suffix)
 
     return result
+
+def get(d: dict[str, set[str]], defaultValueFactory: Callable[[int, str], set[str]], key: str) -> set[str]:
+   if key not in d:
+       d[key] = defaultValueFactory()
+   return d[key]
+
+
+def f(a: str, b: str, c: str) -> list[str]:
+    return [a, b , c]
+
+
+def f_test() -> None:
+    l = ["a", "b", "c"]
+    #res = f(l[0], l[1], l[2])
+    res = f(*l)
+    pretty_print(res)
+
+def g(*args, **kwargs) -> None:
+    pass
+
+f_test()
+
 
 
 # Pathlib can be used to work with file system paths
